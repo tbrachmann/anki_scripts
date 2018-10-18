@@ -33,7 +33,7 @@ notes = pd.read_sql(str(select([db.get_table('notes')])), db.engine)
 models = dict(db.fields_by_id)
 
 def notes_and_field_names(x):
-    notes = x['flds'].split("\u001f")
+    notes = [y.strip() for y in x['flds'].split("\u001f")]
     model_id = str(x['mid'])
     model_names = [x['name'] for x in models[model_id]]
     return {name: field for name, field in zip(model_names, notes)}
