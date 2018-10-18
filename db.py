@@ -2,8 +2,12 @@ import sqlalchemy as sqla
 from sqlalchemy.orm import sessionmaker, Session
 import sqlalchemy.sql as sql
 import json
+import platform
 
-URI = "/home/tobiasrb/.local/share/Anki2/User 1/collection.anki2"
+if "Microsoft" in platform.platform():
+    URI = "/mnt/c/Users/Tobias/AppData/Roaming/Anki2/User 1/collection.anki2"
+else:
+    URI = "/home/tobiasrb/.local/share/Anki2/User 1/collection.anki2"
 
 class AnkiDb:
 
