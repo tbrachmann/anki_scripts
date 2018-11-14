@@ -4,6 +4,7 @@ import re
 from sqlalchemy.sql import *
 import pandas as pd
 import platform
+import MeCab
 
 if "Microsoft" in platform.platform():
     v1_URI = "/mnt/c/Users/Tobias/AppData/Roaming/Anki2/v1 test/collection.anki2"
@@ -49,5 +50,20 @@ def match_kanji(x, vocab, vocab_col):
 
 # only add cloze to kanji odyssey note type, so needs df_filtered
 example_col = "Example Sentence"
-kanji_odyssey_notes = notes_and_fields_eav.loc[pd.notna(notes_and_fields_eav[example_col])]
-kanji_odyssey_notes = kanji_odyssey_notes.dropna(axis=1, how='all')
+ko_notes = notes_and_fields_eav.loc[pd.notna(notes_and_fields_eav[example_col])]
+ko_notes = ko_notes.dropna(axis=1, how='all')
+
+# see how many there are where you can identify the vocab word in the example sentence
+# for exactly half I can find the vocab word in the example sentence easily
+# for the half that I can't immediately find them: 1308
+#   * 1058 don't have example sentences
+#   * 250 remaining that are the problem
+
+# what to do? maybe use pattern to find the lemma
+# lemma - the dictionary form of the word (many different conjugations have the same lemma)
+# tokenize -> lemmatize -> add cloze -> join string
+t = MeCab.Tagger()
+def parse(sentence):
+    m = t.parse(sentence)
+    tokens = m.split("\n")
+    return [x.split("\t") for x in tokens]
