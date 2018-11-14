@@ -65,5 +65,6 @@ ko_notes = ko_notes.dropna(axis=1, how='all')
 t = MeCab.Tagger()
 def parse(sentence):
     m = t.parse(sentence)
-    tokens = m.split("\n")
-    return [x.split("\t") for x in tokens]
+    return [{x.split("\t")[0] : x.split("\t")[1].split(",")}
+            for x in m.split("\n") if x != 'EOS' and x != '']
+
