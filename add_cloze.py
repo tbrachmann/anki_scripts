@@ -3,8 +3,10 @@ from db import AnkiDb
 import re
 from sqlalchemy.sql import *
 import pandas as pd
+import numpy as np
 import platform
 import MeCab
+from jnlp import *
 
 if "Microsoft" in platform.platform():
     v1_URI = "/mnt/c/Users/Tobias/AppData/Roaming/Anki2/v1 test/collection.anki2"
@@ -52,12 +54,15 @@ def match_kanji(x, vocab, vocab_col):
 example_col = "Example Sentence"
 ko_notes = notes_and_fields_eav.loc[pd.notna(notes_and_fields_eav[example_col])]
 ko_notes = ko_notes.dropna(axis=1, how='all')
+ko_notes = ko_notes.replace('', np.nan)
 
 # see how many there are where you can identify the vocab word in the example sentence
 # for exactly half I can find the vocab word in the example sentence easily
 # for the half that I can't immediately find them: 1308
 #   * 1058 don't have example sentences
 #   * 250 remaining that are the problem
+
+clozify = ko_notes[pd.notna(ko_notes['Example Sentence'])]
 
 # what to do? maybe use pattern to find the lemma
 # lemma - the dictionary form of the word (many different conjugations have the same lemma)
@@ -68,3 +73,7 @@ def parse(sentence):
     return [{x.split("\t")[0] : x.split("\t")[1].split(",")}
             for x in m.split("\n") if x != 'EOS' and x != '']
 
+clozify_dict = [x for x in clozify['Example Sentence'].apply(lambda x: parse(x))]
+# before issuing the update statments, need to replace nan with ''
+
+sentence = clozify.iloc[0]['Example Sentence']
