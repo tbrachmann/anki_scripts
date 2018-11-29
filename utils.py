@@ -12,7 +12,7 @@ hiragana = {chr(x) for x in range(HIRAGANA_START, HIRAGANA_END+1)}
 katakana = {chr(x) for x in range(KATAKANA_START, KATAKANA_END+1)}
 kana = hiragana | katakana
 only_chars = re.compile("[\w^\d^-]")
-only_english = re.compile("[a-zA-Z\W]*")
+only_english = re.compile("[a-zA-Z]*")
 only_japanese = re.compile("[^a-z^A-Z\W]*")
 
 def contains_kanji(x):

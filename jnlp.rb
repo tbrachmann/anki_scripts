@@ -8,3 +8,6 @@ puts text
 lemmas = words.collect(&:lemma)
 puts "LEMMAS"
 puts lemmas
+parts_of_speech = words.collect(&:part_of_speech)
+puts "PARTS OF SPEECH"
+puts parts_of_speech

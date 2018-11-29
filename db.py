@@ -12,7 +12,7 @@ else:
 class AnkiDb:
 
     def __init__(self, url=URI):
-        self.engine = sqla.create_engine("sqlite:///" + URI)
+        self.engine = sqla.create_engine("sqlite:///" + url)
         self.meta = sqla.MetaData()
         self.meta.reflect(bind=self.engine)
 
